@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  banking-graphql:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: banking-graphql-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/graphql"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - banking-network
+
+networks:
+  banking-network:
+    driver: bridge

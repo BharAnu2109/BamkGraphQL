@@ -1,0 +1,49 @@
+# Get all customers
+query GetAllCustomers {
+  getAllCustomers {
+    id
+    firstName
+    lastName
+    email
+    phone
+    address
+    dateOfBirth
+    createdAt
+    accounts {
+      accountNumber
+      accountType
+      balance
+      status
+    }
+  }
+}
+
+# Get customer by ID
+query GetCustomerById {
+  getCustomerById(id: 1) {
+    id
+    firstName
+    lastName
+    email
+    phone
+    accounts {
+      accountNumber
+      balance
+    }
+  }
+}
+
+# Get customer by email
+query GetCustomerByEmail {
+  getCustomerByEmail(email: "john.doe@example.com") {
+    id
+    firstName
+    lastName
+    email
+    accounts {
+      accountNumber
+      accountType
+      balance
+    }
+  }
+}

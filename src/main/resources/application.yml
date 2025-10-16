@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: banking-graphql-service
+  
+  datasource:
+    url: jdbc:h2:mem:bankingdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  
+  graphql:
+    graphiql:
+      enabled: true
+      path: /graphiql
+    path: /graphql
+    schema:
+      printer:
+        enabled: true
+
+server:
+  port: 8080
+
+logging:
+  level:
+    com.banking.graphql: DEBUG
+    org.springframework.graphql: DEBUG
