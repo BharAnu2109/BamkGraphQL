@@ -1,0 +1,188 @@
+type Query {
+    # Customer Queries
+    getAllCustomers: [Customer!]!
+    getCustomerById(id: ID!): Customer
+    getCustomerByEmail(email: String!): Customer
+    
+    # Account Queries
+    getAllAccounts: [Account!]!
+    getAccountById(id: ID!): Account
+    getAccountsByCustomerId(customerId: ID!): [Account!]!
+    getAccountBalance(accountNumber: String!): Float
+    
+    # Transaction Queries
+    getAllTransactions: [Transaction!]!
+    getTransactionById(id: ID!): Transaction
+    getTransactionsByAccountId(accountId: ID!): [Transaction!]!
+    getTransactionsByDateRange(accountId: ID!, startDate: String!, endDate: String!): [Transaction!]!
+    getAccountStatement(accountNumber: String!, startDate: String!, endDate: String!): AccountStatement!
+}
+
+type Mutation {
+    # Customer Mutations
+    createCustomer(input: CreateCustomerInput!): Customer!
+    updateCustomer(id: ID!, input: UpdateCustomerInput!): Customer!
+    deleteCustomer(id: ID!): Boolean!
+    
+    # Account Mutations
+    createAccount(input: CreateAccountInput!): Account!
+    updateAccount(id: ID!, input: UpdateAccountInput!): Account!
+    closeAccount(id: ID!): Boolean!
+    
+    # Transaction Mutations
+    deposit(input: DepositInput!): Transaction!
+    withdraw(input: WithdrawInput!): Transaction!
+    transfer(input: TransferInput!): TransferResult!
+    
+    # Complex Banking Operations
+    openSavingsAccountWithDeposit(customerId: ID!, initialDeposit: Float!): Account!
+    bulkTransfer(transfers: [BulkTransferInput!]!): [TransferResult!]!
+}
+
+# Types
+type Customer {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    email: String!
+    phone: String!
+    address: String
+    dateOfBirth: String!
+    createdAt: String!
+    updatedAt: String!
+    accounts: [Account!]!
+}
+
+type Account {
+    id: ID!
+    accountNumber: String!
+    accountType: AccountType!
+    balance: Float!
+    currency: String!
+    status: AccountStatus!
+    customerId: ID!
+    customer: Customer!
+    createdAt: String!
+    updatedAt: String!
+    transactions: [Transaction!]!
+}
+
+type Transaction {
+    id: ID!
+    transactionType: TransactionType!
+    amount: Float!
+    currency: String!
+    description: String
+    status: TransactionStatus!
+    accountId: ID!
+    account: Account!
+    referenceNumber: String!
+    balanceAfter: Float!
+    createdAt: String!
+    relatedTransactionId: ID
+}
+
+type AccountStatement {
+    accountNumber: String!
+    startDate: String!
+    endDate: String!
+    openingBalance: Float!
+    closingBalance: Float!
+    totalDeposits: Float!
+    totalWithdrawals: Float!
+    transactionCount: Int!
+    transactions: [Transaction!]!
+}
+
+type TransferResult {
+    success: Boolean!
+    message: String!
+    sourceTransaction: Transaction
+    destinationTransaction: Transaction
+}
+
+# Enums
+enum AccountType {
+    SAVINGS
+    CHECKING
+    FIXED_DEPOSIT
+    CURRENT
+}
+
+enum AccountStatus {
+    ACTIVE
+    INACTIVE
+    SUSPENDED
+    CLOSED
+}
+
+enum TransactionType {
+    DEPOSIT
+    WITHDRAWAL
+    TRANSFER_IN
+    TRANSFER_OUT
+    INTEREST_CREDIT
+    FEE_DEBIT
+}
+
+enum TransactionStatus {
+    PENDING
+    COMPLETED
+    FAILED
+    REVERSED
+}
+
+# Input Types
+input CreateCustomerInput {
+    firstName: String!
+    lastName: String!
+    email: String!
+    phone: String!
+    address: String
+    dateOfBirth: String!
+}
+
+input UpdateCustomerInput {
+    firstName: String
+    lastName: String
+    email: String
+    phone: String
+    address: String
+}
+
+input CreateAccountInput {
+    customerId: ID!
+    accountType: AccountType!
+    initialDeposit: Float!
+    currency: String
+}
+
+input UpdateAccountInput {
+    status: AccountStatus
+}
+
+input DepositInput {
+    accountNumber: String!
+    amount: Float!
+    description: String
+}
+
+input WithdrawInput {
+    accountNumber: String!
+    amount: Float!
+    description: String
+}
+
+input TransferInput {
+    sourceAccountNumber: String!
+    destinationAccountNumber: String!
+    amount: Float!
+    description: String
+}
+
+input BulkTransferInput {
+    sourceAccountNumber: String!
+    destinationAccountNumber: String!
+    amount: Float!
+    description: String
+}

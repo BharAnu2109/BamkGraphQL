@@ -1,0 +1,132 @@
+# Deposit money
+mutation DepositMoney {
+  deposit(input: {
+    accountNumber: "ACC1729078080538716"
+    amount: 1500.0
+    description: "Monthly salary deposit"
+  }) {
+    id
+    transactionType
+    amount
+    description
+    balanceAfter
+    referenceNumber
+    status
+    createdAt
+  }
+}
+
+# Withdraw money
+mutation WithdrawMoney {
+  withdraw(input: {
+    accountNumber: "ACC1729078080538716"
+    amount: 500.0
+    description: "ATM withdrawal"
+  }) {
+    id
+    transactionType
+    amount
+    description
+    balanceAfter
+    referenceNumber
+    status
+    createdAt
+  }
+}
+
+# Transfer money between accounts
+mutation TransferMoney {
+  transfer(input: {
+    sourceAccountNumber: "ACC1729078080538716"
+    destinationAccountNumber: "ACC1729078080651923"
+    amount: 300.0
+    description: "Payment for services"
+  }) {
+    success
+    message
+    sourceTransaction {
+      id
+      transactionType
+      amount
+      balanceAfter
+      referenceNumber
+      relatedTransactionId
+    }
+    destinationTransaction {
+      id
+      transactionType
+      amount
+      balanceAfter
+      referenceNumber
+      relatedTransactionId
+    }
+  }
+}
+
+# Get all transactions
+query GetAllTransactions {
+  getAllTransactions {
+    id
+    transactionType
+    amount
+    description
+    status
+    referenceNumber
+    balanceAfter
+    createdAt
+    account {
+      accountNumber
+      customer {
+        firstName
+        lastName
+      }
+    }
+  }
+}
+
+# Get transaction by ID
+query GetTransactionById {
+  getTransactionById(id: 1) {
+    id
+    transactionType
+    amount
+    description
+    status
+    referenceNumber
+    balanceAfter
+    createdAt
+    account {
+      accountNumber
+      balance
+    }
+  }
+}
+
+# Get transactions by account
+query GetTransactionsByAccount {
+  getTransactionsByAccountId(accountId: 1) {
+    id
+    transactionType
+    amount
+    description
+    balanceAfter
+    referenceNumber
+    createdAt
+  }
+}
+
+# Get transactions by date range
+query GetTransactionsByDateRange {
+  getTransactionsByDateRange(
+    accountId: 1
+    startDate: "2024-01-01T00:00:00"
+    endDate: "2024-12-31T23:59:59"
+  ) {
+    id
+    transactionType
+    amount
+    description
+    balanceAfter
+    createdAt
+  }
+}

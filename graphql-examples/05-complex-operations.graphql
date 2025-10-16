@@ -1,0 +1,101 @@
+# Open savings account with initial deposit
+mutation OpenSavingsAccountWithDeposit {
+  openSavingsAccountWithDeposit(
+    customerId: 1
+    initialDeposit: 10000.0
+  ) {
+    id
+    accountNumber
+    accountType
+    balance
+    status
+    createdAt
+  }
+}
+
+# Bulk transfer operation
+mutation BulkTransfer {
+  bulkTransfer(transfers: [
+    {
+      sourceAccountNumber: "ACC1729078080538716"
+      destinationAccountNumber: "ACC1729078080651923"
+      amount: 100.0
+      description: "Vendor payment 1"
+    },
+    {
+      sourceAccountNumber: "ACC1729078080538716"
+      destinationAccountNumber: "ACC1729078080760198"
+      amount: 150.0
+      description: "Vendor payment 2"
+    },
+    {
+      sourceAccountNumber: "ACC1729078080538716"
+      destinationAccountNumber: "ACC1729078080849401"
+      amount: 200.0
+      description: "Vendor payment 3"
+    }
+  ]) {
+    success
+    message
+    sourceTransaction {
+      referenceNumber
+      amount
+      balanceAfter
+    }
+    destinationTransaction {
+      referenceNumber
+      amount
+      balanceAfter
+    }
+  }
+}
+
+# Get account statement
+query GetAccountStatement {
+  getAccountStatement(
+    accountNumber: "ACC1729078080538716"
+    startDate: "2024-01-01T00:00:00"
+    endDate: "2024-12-31T23:59:59"
+  ) {
+    accountNumber
+    startDate
+    endDate
+    openingBalance
+    closingBalance
+    totalDeposits
+    totalWithdrawals
+    transactionCount
+    transactions {
+      id
+      transactionType
+      amount
+      description
+      balanceAfter
+      referenceNumber
+      createdAt
+    }
+  }
+}
+
+# Complex query with nested relationships
+query ComplexCustomerQuery {
+  getAllCustomers {
+    id
+    firstName
+    lastName
+    email
+    accounts {
+      accountNumber
+      accountType
+      balance
+      status
+      transactions {
+        transactionType
+        amount
+        description
+        balanceAfter
+        createdAt
+      }
+    }
+  }
+}

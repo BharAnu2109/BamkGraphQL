@@ -1,0 +1,100 @@
+# Create a savings account
+mutation CreateSavingsAccount {
+  createAccount(input: {
+    customerId: 1
+    accountType: SAVINGS
+    initialDeposit: 5000.0
+    currency: "USD"
+  }) {
+    id
+    accountNumber
+    accountType
+    balance
+    status
+    createdAt
+  }
+}
+
+# Create a checking account
+mutation CreateCheckingAccount {
+  createAccount(input: {
+    customerId: 1
+    accountType: CHECKING
+    initialDeposit: 1000.0
+  }) {
+    id
+    accountNumber
+    accountType
+    balance
+  }
+}
+
+# Get all accounts
+query GetAllAccounts {
+  getAllAccounts {
+    id
+    accountNumber
+    accountType
+    balance
+    status
+    customer {
+      firstName
+      lastName
+    }
+  }
+}
+
+# Get account by ID
+query GetAccountById {
+  getAccountById(id: 1) {
+    id
+    accountNumber
+    accountType
+    balance
+    status
+    customer {
+      firstName
+      lastName
+      email
+    }
+    transactions {
+      transactionType
+      amount
+      description
+      createdAt
+    }
+  }
+}
+
+# Get accounts by customer ID
+query GetAccountsByCustomer {
+  getAccountsByCustomerId(customerId: 1) {
+    id
+    accountNumber
+    accountType
+    balance
+    status
+  }
+}
+
+# Get account balance
+query GetAccountBalance {
+  getAccountBalance(accountNumber: "ACC1729078080538716")
+}
+
+# Update account status
+mutation UpdateAccount {
+  updateAccount(id: 1, input: {
+    status: ACTIVE
+  }) {
+    id
+    accountNumber
+    status
+    updatedAt
+  }
+}
+
+# Close account
+mutation CloseAccount {
+  closeAccount(id: 3)
+}
